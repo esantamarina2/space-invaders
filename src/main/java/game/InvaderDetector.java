@@ -41,8 +41,8 @@ public class InvaderDetector {
         return result;
     }
 
-    public List<Image> detectInvaders(Image radarInfo) {
-        List<Image> detectionResult = new ArrayList<>();
+    public DetectionDetected detectInvaders(Image radarInfo) {
+        DetectionDetected detectionResult = new DetectionDetected();
         for (int x = 0; x < radarInfo.getWidth(); x++) {
             for (int y = 0; y < radarInfo.getHeight(); y++) {
               //  if (detectionResult.dotDetected(x, y)) {
@@ -50,10 +50,10 @@ public class InvaderDetector {
                // }
 
                 for (Image invader : invaders) {
-                    ImageRange imageRange = new ImageRange( invader.getWidth(), invader.getHeight(), x, y);
+                    ImageRange imageRange = new ImageRange(invader.getWidth(), invader.getHeight(), x, y);
                     Image subImage = radarInfo.getSubImage(imageRange);
                     if (imageMatchesPattern(subImage, invader)) {
-                        detectionResult.add(invader);
+                        detectionResult.addDetection(invader, imageRange);
                         break;
                     }
                 }

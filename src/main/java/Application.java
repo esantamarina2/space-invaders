@@ -1,33 +1,30 @@
+import game.DetectionDetected;
 import game.InvaderDetector;
 import model.Image;
+import model.ImageRange;
 import readers.FileImageReader;
-import readers.ImageReader;
 
-import javax.annotation.Resources;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 public class Application {
-    public static void main(String[] args) throws Exception {
-        System.out.println("******WELCOME!******");
-        System.out.println("Input radar image:");
+    public static void main(String[] args) {
 
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        File file = new File(classloader.getResource("radar-image.txt").getFile());
-        FileImageReader imageReader = new FileImageReader(file);
-        Image image = imageReader.readImage();
+        File file = new File(classloader.getResource("radar-image").getFile());
 
-        InvaderDetector invaderDetector = new InvaderDetector();
-        List<Image> invadersDetected = invaderDetector.detectInvaders(image);
-        for (Image i: invadersDetected){
-            for (char[] row: i.getRows()){
-                System.out.println(row);
-            }
+        DetectionDetected invadersDetected = detectInvadersInFile(file);
+
+        for (Map.Entry<Image, ImageRange> entry : invadersDetected.getDetectedInvaders().entrySet()) {
+            System.out.println("************************");
+            System.out.print("==>In ranges:");
+            System.out.println(entry.getValue());
+            System.out.println("==>Invader:");
+            System.out.println(entry.getKey());
+            System.out.println("************************");
+
         }
-
-        System.out.println("Image loaded");
-        System.out.println("Scanning image...");
 
        /* InvaderDetector invaderDetector = new InvaderDetector();
         DetectionResult detectionResult = invaderDetector.detectInvadersOnMap(new RadarInfo(image));
@@ -46,5 +43,10 @@ public class Application {
         } else {
             System.out.println("Image is clear. Fuuuuuh...");
         } */
+    }
+
+    private static DetectionDetected detectInvadersInFile(File file){
+        Image image = new FileImageReader(file).readImage();
+        return new InvaderDetector().detectInvaders(image);
     }
 }

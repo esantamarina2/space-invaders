@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Data
 public class Image {
@@ -16,9 +17,11 @@ public class Image {
         rows.add(line.toCharArray());
     }
 
-    public void addRow(char[] line) { rows.add(line); }
+    public void addRow(char[] line) {
+        rows.add(line);
+    }
 
-    public int getHeight(){
+    public int getHeight() {
         return rows.size();
     }
 
@@ -31,9 +34,7 @@ public class Image {
 
     @Override
     public String toString() {
-        return "Image{" +
-                "rows=" + rows +
-                '}';
+        return rows.stream().map(row -> String.valueOf(row)).collect(Collectors.joining(System.lineSeparator()));
     }
 
     @Override
@@ -41,7 +42,12 @@ public class Image {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Image image = (Image) o;
-        return Objects.equals(rows, image.rows);
+        for (int i = 0; i < rows.size(); i++) {
+            if (!Arrays.equals(rows.get(i), image.getRows().get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
