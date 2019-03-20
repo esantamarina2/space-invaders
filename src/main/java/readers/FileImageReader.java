@@ -2,6 +2,7 @@ package readers;
 
 import lombok.Data;
 import model.Image;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,11 +16,17 @@ public class FileImageReader implements ImageReader {
 
     protected File file;
 
+    private static Logger log = Logger.getLogger(FileImageReader.class);
+
     public FileImageReader(File file){
         this.file=file;
     }
 
-    @Override
+    /**
+     * Create new image reading file line by line
+     * Throws FileNotFoundException, IOException
+     */
+     @Override
     public Image readImage() {
         Image image = new Image();
         try (
@@ -27,9 +34,9 @@ public class FileImageReader implements ImageReader {
                     new FileReader(file))) {
             reader.lines().forEach(image::addRow);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.error("readImage: File not found: " + e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("readImage: Error ocurring reading new file image: " + e);
         }
         return image;
     }

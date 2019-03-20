@@ -9,6 +9,8 @@ import readers.FileImageReader;
 import readers.ImageReader;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,79 +23,81 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 public class InvadeDetectorTest {
 
+    private static final String WITH_INVADERS = "map-with-invaders";
+    private static final String WITHOUT_INVADERS = "map-without-invaders";
+
+    /*
+    Scenario: Detect invaders on image with
+          an existing one
+    */
     @Test
-    public void testDetectInvadersOnMap() throws Exception {
-        assertThat(getDetectionResult("test-map").getDetectedInvaders().isEmpty(), is(equalTo(false)));
-        //Assert.assertTrue(getDetectionResult("map-with-invaders-and-noise").imageHasInvaders());
-        //Assert.assertFalse(getDetectionResult("map-without-invaders").imageHasInvaders());
-
-        DetectionDetected positiveDetection = getDetectionResult("map-with-invaders");
-        ImageRange firstDetection = new ImageRange(11, 8, 1, 0);
-        ImageRange secondDetection = new ImageRange(8, 8, 12, 8);
-        Assert.assertTrue(positiveDetection.imageHasInvaders());
-
-        List<ImageRange> selectionRanges = positiveDetection.getDetectedInvaders().values().stream()
-                .collect(Collectors.toList());
-
-        Assert.assertEquals(2, selectionRanges.size());
-        Assert.assertTrue(selectionRanges.contains(firstDetection));
-        Assert.assertTrue(selectionRanges.contains(secondDetection));
+    public void testDetectInvaders() throws Exception {
+        assertThat(getDetectionResult(WITH_INVADERS).getDetectedInvaders().isEmpty(), is(equalTo(false)));
     }
 
-    private DetectionDetected getDetectionResult(String resourceName) throws Exception {
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        ImageReader imageReader = new FileImageReader(new File(classloader.getResource(resourceName).toURI()));
-        Image radarInfo = imageReader.readImage();
-        InvaderDetector invaderDetector = new InvaderDetector();
-        return invaderDetector.detectInvaders(radarInfo);
-    }
-/*
+    /*
+    Scenario: Detect invaders on image with
+         an existing one
+    */
     @Test
-    public void imageMatchesPattern() throws Exception {
-        Image image = new Image();
-        image.addRow("ooo");
-        image.addRow("-o-");
-        image.addRow("ooo");
-
-        Assert.assertTrue(InvaderDetector.imageMatchesPattern(image, getPattern()));
+    public void testDetectNoInvaders() throws Exception {
+        assertThat(getDetectionResult(WITHOUT_INVADERS).getDetectedInvaders().isEmpty(), is(equalTo(true)));
     }
 
+    /*
+    Scenario: Verify image range for
+         detected invaders
+    */
     @Test
-    public void imageWithNoiseMatchesPattern() throws Exception {
-        Image image = new Image();
-        image.addRow("ooo");
-        image.addRow("oo-");
-        image.addRow("ooo");
+    public void testImageRangeDetected() throws Exception {
+        DetectionDetected resultDetection = getDetectionResult(WITH_INVADERS);
+        ImageRange firstInvader = new ImageRange(11, 8, 1, 0);
+        ImageRange secondInvader = new ImageRange(8, 8, 12, 8);
 
-        Assert.assertTrue(InvaderDetector.imageMatchesPattern(image, getPattern()));
+        List<ImageRange> imageRanges = new ArrayList<>(resultDetection.getDetectedInvaders().values());
+
+        assertThat(imageRanges.size(), is(equalTo(2)));
+        assertThat(imageRanges.contains(firstInvader), is(equalTo(true)));
+        assertThat(imageRanges.contains(secondInvader), is(equalTo(true)));
     }
 
+    /*
+   Scenario: Compare two similar images
+   */
     @Test
-    public void imageWithNegativeNoiseMatchesPattern() throws Exception {
-        Image image = new Image();
-        image.addRow("o-o");
-        image.addRow("-o-");
-        image.addRow("ooo");
+    public void imagesMatches() {
+       Image firstImage = getSubImage();
+       Image secondImage = getSubImage();
 
-        Assert.assertTrue(InvaderDetector.imageMatchesPattern(image, getPattern()));
+       assertThat(InvaderDetector.imagesMatches(firstImage, secondImage), is(equalTo(true)));
     }
 
+    /*
+   Scenario: Compare two different images
+   */
     @Test
-    public void imageNotMatchesPattern() throws Exception {
+    public void imageNotMatches() {
         Image image = new Image();
         image.addRow("o--");
         image.addRow("-o-");
         image.addRow("-oo");
 
-        Assert.assertFalse(InvaderDetector.imageMatchesPattern(image, getPattern()));
+        assertThat(InvaderDetector.imagesMatches(image, getSubImage()), is(equalTo(false)));
     }
 
-    private Image getPattern() {
-        Image pattern = new Image();
-        pattern.addRow("ooo");
-        pattern.addRow("-o-");
-        pattern.addRow("ooo");
 
-        return pattern;
-    } */
+    private DetectionDetected getDetectionResult(String resourceName) throws Exception {
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        ImageReader imageReader = new FileImageReader(new File(classloader.getResource(resourceName).toURI()));
+        return new InvaderDetector().detectInvaders(imageReader.readImage());
+    }
+
+    private Image getSubImage() {
+        Image subImage = new Image();
+        subImage.addRow("ooo");
+        subImage.addRow("-o-");
+        subImage.addRow("ooo");
+
+        return subImage;
+    }
 }

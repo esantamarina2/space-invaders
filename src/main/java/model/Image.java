@@ -55,6 +55,9 @@ public class Image {
         return Objects.hash(rows);
     }
 
+    /**
+     * Create a new sub image using subset of coordinates
+     */
     public Image getSubImage(ImageRange imageRange) {
         Image newImage = new Image();
         for (int i = imageRange.getLeftTopY(); i <= imageRange.getRightBottomY() && i < this.getHeight(); i++) {

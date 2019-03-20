@@ -16,9 +16,9 @@ public class FileImageReaderTest {
     private static String FILE_NAME = "invaders/invader-1";
 
     /*
-   Scenario: Read file from resources folder
+    Scenario: Read file from resources folder
            Verify expected bounds
-  */
+    */
     @Test
     public void testReadInvaderFile() throws Exception {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();

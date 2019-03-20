@@ -16,7 +16,4 @@ public class DetectionDetected {
         detectedInvaders.put(invaderDetected, imageRange);
     }
 
-    public boolean imageHasInvaders() {
-        return !detectedInvaders.isEmpty();
-    }
 }
