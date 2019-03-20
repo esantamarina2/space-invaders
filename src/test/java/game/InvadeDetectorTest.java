@@ -1,19 +1,17 @@
 package game;
 
-import model.Image;
-import model.ImageRange;
-import org.hamcrest.core.Is;
-import org.junit.Assert;
+import com.fuga.game.DetectionDetected;
+import com.fuga.game.InvaderDetector;
+import com.fuga.model.Image;
+import com.fuga.model.ImageRange;
+import com.fuga.readers.FileImageReader;
+import com.fuga.readers.ImageReader;
+
 import org.junit.Test;
-import readers.FileImageReader;
-import readers.ImageReader;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 import static org.hamcrest.core.Is.is;

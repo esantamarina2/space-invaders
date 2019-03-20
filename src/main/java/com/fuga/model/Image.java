@@ -1,4 +1,4 @@
-package model;
+package com.fuga.model;
 
 import lombok.Data;
 

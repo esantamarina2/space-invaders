@@ -1,6 +1,6 @@
-package readers;
+package com.fuga.readers;
 
-import model.Image;
+import com.fuga.model.Image;
 
 public interface ImageReader {
 

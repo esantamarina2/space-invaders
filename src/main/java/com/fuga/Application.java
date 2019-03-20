@@ -1,9 +1,11 @@
-import game.DetectionDetected;
-import game.InvaderDetector;
-import model.Image;
-import model.ImageRange;
+package com.fuga;
+
+import com.fuga.game.DetectionDetected;
+import com.fuga.game.InvaderDetector;
+import com.fuga.model.Image;
+import com.fuga.model.ImageRange;
 import org.apache.log4j.Logger;
-import readers.FileImageReader;
+import com.fuga.readers.FileImageReader;
 
 import java.io.File;
 import java.util.Map;

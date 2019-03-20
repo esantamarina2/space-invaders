@@ -1,9 +1,9 @@
-package game;
+package com.fuga.game;
 
-import model.Image;
-import model.ImageRange;
+import com.fuga.model.Image;
+import com.fuga.model.ImageRange;
+import com.fuga.readers.FileImageReader;
 import org.apache.log4j.Logger;
-import readers.FileImageReader;
 
 import java.io.File;
 import java.util.HashSet;

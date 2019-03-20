@@ -1,5 +1,7 @@
 package model;
 
+import com.fuga.model.Image;
+import com.fuga.model.ImageRange;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -1,7 +1,7 @@
-package readers;
+package com.fuga.readers;
 
 import lombok.Data;
-import model.Image;
+import com.fuga.model.Image;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;

@@ -1,8 +1,8 @@
-package game;
+package com.fuga.game;
 
 import lombok.Data;
-import model.Image;
-import model.ImageRange;
+import com.fuga.model.Image;
+import com.fuga.model.ImageRange;
 
 import java.util.HashMap;
 import java.util.Map;
